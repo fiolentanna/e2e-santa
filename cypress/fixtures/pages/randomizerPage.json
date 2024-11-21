@@ -1,0 +1,8 @@
+{
+ "firstUserNameField": ":nth-child(3) > .frm-wrapper > #input-table-0",
+ "firstUserEmailField": ":nth-child(4) #input-table-0",
+ "secondUserNameField": "#input-table-1",
+ "secondUserEmailField": ":nth-child(6) #input-table-1",
+ "thirdUserNameField": "#input-table-2",
+ "thirdUserEmailField": ":nth-child(8) #input-table-2"
+}
