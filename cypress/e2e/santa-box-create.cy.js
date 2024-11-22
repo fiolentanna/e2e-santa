@@ -24,12 +24,11 @@ describe("user can create a box and run it", () => {
   let newBoxName = faker.word.noun({ length: { min: 5, max: 10 } });
   let wishes = faker.word.noun() + faker.word.adverb() + faker.word.adjective();
   let minAmount = 50;
-  let maxAmount = 100; 
+  let maxAmount = 100;
   let currency = "Евро";
   let inviteLink;
   let currentBox;
   let boxId;
-
 
   it("user logins and create a box", () => {
     cy.visit("/login");
@@ -41,26 +40,26 @@ describe("user can create a box and run it", () => {
       .invoke("val")
       .then(function (value) {
         boxId = value;
-        cy.log("Box ID:", boxId); 
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(boxPage.sixthIcon).click();
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(boxPage.giftPriceToggle).click({ force: true });
-    cy.get(boxPage.minAmount).type(minAmount);
-    cy.get(boxPage.maxAmount).type(maxAmount);
-    cy.get(boxPage.currency).select(currency);
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
-    cy.get(inviteeBoxPage.boxMenu)
-      .invoke("text")
-      .then((text) => {
-        expect(text).to.include("Участники");
-        expect(text).to.include("Моя карточка");
-        expect(text).to.include("Подопечный");
+        cy.log("Box ID:", boxId);
+        cy.get(generalElements.arrowRight).click({ force: true });
+        cy.get(boxPage.sixthIcon).click();
+        cy.get(generalElements.arrowRight).click({ force: true });
+        cy.get(boxPage.giftPriceToggle).click({ force: true });
+        cy.get(boxPage.minAmount).type(minAmount);
+        cy.get(boxPage.maxAmount).type(maxAmount);
+        cy.get(boxPage.currency).select(currency);
+        cy.get(generalElements.arrowRight).click({ force: true });
+        cy.get(generalElements.arrowRight).click({ force: true });
+        cy.get(generalElements.arrowRight).click({ force: true });
+        cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
+        cy.get(inviteeBoxPage.boxMenu)
+          .invoke("text")
+          .then((text) => {
+            expect(text).to.include("Участники");
+            expect(text).to.include("Моя карточка");
+            expect(text).to.include("Подопечный");
+          });
       });
-    });  
   });
 
   it("add participants by invite link", () => {
@@ -78,7 +77,6 @@ describe("user can create a box and run it", () => {
     cy.get(invitePage.inviteeSubmitButton).click({ force: true });
   });
 
-
   it("Сreate a member card by main user", () => {
     cy.get(invitePage.createParticipantButton).click();
     cy.get(generalElements.arrowRight).click({ force: true });
@@ -87,7 +85,7 @@ describe("user can create a box and run it", () => {
     cy.get(boxPage.wishesFrame).type(wishes);
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.clearCookies();
-  })
+  });
 
   it("approve as user1 by invite link", () => {
     cy.visit(inviteLink);
@@ -107,7 +105,6 @@ describe("user can create a box and run it", () => {
       });
     cy.clearCookies();
   });
-
 
   it("confirmation of invitation in the box by user 2", () => {
     cy.visit("/login");
@@ -160,14 +157,16 @@ describe("user can create a box and run it", () => {
     cy.contains("Жеребьевка проведена!").should("exist");
   });
 
-
-  // after("delete box", () => {
-  //   cy.request({
-  //     method: 'DELETE',
-  //     url: `/api/box/${boxId}`,
-  //     headers: {
-  //       Cookies: ""
-  //     }
-  //   });
-  // });
-})
+  after("delete box", () => {
+    cy.request({
+      method: "DELETE",
+      url: `/api/box/${boxId}`,
+      headers: {
+        Cookies:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjY4MjE2ODksImlhdCI6MTczMjMxNDczMSwiZXhwIjoxNzM0OTA2NzMxfQ.ByM7TfA1jm36EXgIwqeHvfDlNNT4QbZthYw3pXYUFgE; Max-Age=2592000",
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+    });
+  });
+});
