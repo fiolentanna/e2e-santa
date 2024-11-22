@@ -1,3 +1,7 @@
 {
-  "inviteLink": ":nth-child(2) > .form-page-group__main b"
+  "inviteLink": ":nth-child(2) > .form-page-group__main b",
+  "firstInviteeNameField": ":nth-child(1) > .frm-wrapper > #input-table-0",
+  "firstInviteeEmailField": ":nth-child(2) > .frm-wrapper > #input-table-0",
+  "inviteeSubmitButton": ".form-page__buttons > .btn-main",
+  "createParticipantButton": ".layout-row-center > .btn-main"
 }

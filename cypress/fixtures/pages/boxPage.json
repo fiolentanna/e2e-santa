@@ -1,8 +1,13 @@
 {
   "boxNameField": ":nth-child(1) > .frm",
+  "boxIdField" : "div.frm-wrapper:nth-child(3) > input",
   "sixthIcon": ":nth-child(6) > .picture_svg_wrapper",
   "giftPriceToggle": ".switch__toggle",
   "minAmount" : ":nth-child(1) > .frm-wrapper > .frm",
   "maxAmount": ":nth-child(2) > .frm-wrapper > .frm",
-  "currency": ".MuiGrid-grid-xs-6 .frm"
+  "currency": ".MuiGrid-grid-xs-6 .frm",
+  "unconfirmedUserCard": "a > .user-card",
+  "twelveIcon": ":nth-child(12) > .picture_svg_wrapper",
+  "wishesFrame": ".frm",
+  "twentyNineIcon": ":nth-child(29) > .picture_svg_wrapper"
 }

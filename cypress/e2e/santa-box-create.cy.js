@@ -28,14 +28,20 @@ describe("user can create a box and run it", () => {
   let currency = "Евро";
   let inviteLink;
   let currentBox;
+  let boxId;
 
 
   it("user logins and create a box", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
     cy.contains("Создать коробку").click();
-    cy.get(boxPage.boxNameField).type(newBoxName);
+    cy.get(boxPage.boxNameField).type(newBoxName, { force: true });
     currentBox = newBoxName;
+    cy.get(boxPage.boxIdField)
+      .invoke("val")
+      .then(function (value) {
+        boxId = value;
+        cy.log("Box ID:", boxId); 
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(boxPage.sixthIcon).click();
     cy.get(generalElements.arrowRight).click({ force: true });
@@ -47,36 +53,53 @@ describe("user can create a box and run it", () => {
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
-    cy.get(".layout-1__header-wrapper-fixed .toggle-menu-item span")
+    cy.get(inviteeBoxPage.boxMenu)
       .invoke("text")
       .then((text) => {
         expect(text).to.include("Участники");
         expect(text).to.include("Моя карточка");
         expect(text).to.include("Подопечный");
       });
+    });  
   });
 
-  it("add participants", () => {
-    cy.get(generalElements.submitButton).click();
+  it("add participants by invite link", () => {
+    cy.get(generalElements.submitButton).click({ force: true });
     cy.get(invitePage.inviteLink)
       .invoke("text")
       .then((link) => {
         inviteLink = link;
       });
-    cy.clearCookies();
   });
 
-  it("approve as user1", () => {
+  it("Add participant from created boxPage by hand", () => {
+    cy.get(invitePage.firstInviteeNameField).type(users.user2.name);
+    cy.get(invitePage.firstInviteeEmailField).type(users.user2.email);
+    cy.get(invitePage.inviteeSubmitButton).click({ force: true });
+  });
+
+
+  it("Сreate a member card by main user", () => {
+    cy.get(invitePage.createParticipantButton).click();
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.get(boxPage.twentyNineIcon).click();
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.get(boxPage.wishesFrame).type(wishes);
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.clearCookies();
+  })
+
+  it("approve as user1 by invite link", () => {
     cy.visit(inviteLink);
-    cy.get(generalElements.submitButton).click();
-    cy.contains("войдите").click();
+    cy.get(generalElements.submitButton).click({ force: true });
+    cy.contains("войдите").click({ force: true });
     cy.login(users.user1.email, users.user1.password);
     cy.contains("Создать карточку участника").should("exist");
-    cy.get(generalElements.submitButton).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
+    cy.get(generalElements.submitButton).click({ force: true });
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click();
+    cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(inviteeDashboardPage.noticeForInvitee)
       .invoke("text")
       .then((text) => {
@@ -86,22 +109,19 @@ describe("user can create a box and run it", () => {
   });
 
 
-  it("approve as user2", () => {
-    cy.visit(inviteLink);
-    cy.get(generalElements.submitButton).click();
-    cy.contains("войдите").click();
+  it("confirmation of invitation in the box by user 2", () => {
+    cy.visit("/login");
     cy.login(users.user2.email, users.user2.password);
-    cy.contains("Создать карточку участника").should("exist");
-    cy.get(generalElements.submitButton).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click();
-    cy.get(inviteeDashboardPage.noticeForInvitee)
-      .invoke("text")
-      .then((text) => {
-        expect(text).to.contain("Это — анонимный чат с вашим Тайным Сантой");
-      });
+    cy.get(generalElements.boxesInHeader).click({ force: true });
+    cy.contains(currentBox).click({ force: true });
+    cy.get(boxPage.unconfirmedUserCard).click();
+    cy.get(generalElements.submitButton).click({ force: true });
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.get(boxPage.twelveIcon).click({ force: true });
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.get(boxPage.wishesFrame).type(wishes);
+    cy.get(generalElements.arrowRight).click({ force: true });
+    cy.contains("Это — анонимный чат с вашим Тайным Сантой");
     cy.clearCookies();
   });
 
@@ -138,23 +158,16 @@ describe("user can create a box and run it", () => {
     cy.get(generalElements.arrowRight).click();
     cy.get(generalElements.arrowRight).click();
     cy.contains("Жеребьевка проведена!").should("exist");
-  })
+  });
 
 
   // after("delete box", () => {
-  //   cy.visit("/login");
-  //   cy.login(users.userAutor.email, users.userAutor.password);
-  //   cy.get(
-  //     '.layout-1__header-wrapper-fixed > .layout-1__header > .header > .header__items > .layout-row-start > [href="/account/boxes"] > .header-item > .header-item__text > .txt--med'
-  //   ).click();
-  //   cy.get(":nth-child(1) > a.base--clickable > .user-card").first().click();
-  //   cy.get(
-  //     ".layout-1__header-wrapper-fixed > .layout-1__header-secondary > .header-secondary > .header-secondary__right-item > .toggle-menu-wrapper > .toggle-menu-button > .toggle-menu-button--inner"
-  //   ).click();
-  //   cy.contains("Архивация и удаление").click({ force: true });
-  //   cy.get(":nth-child(2) > .form-page-group__main > .frm-wrapper > .frm").type(
-  //     "Удалить коробку"
-  //   );
-  //   cy.get(".btn-service").click();
+  //   cy.request({
+  //     method: 'DELETE',
+  //     url: `/api/box/${boxId}`,
+  //     headers: {
+  //       Cookies: ""
+  //     }
+  //   });
   // });
-});
+})

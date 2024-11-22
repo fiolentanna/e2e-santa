@@ -1,3 +1,4 @@
 {
-  "wishesInput": ".frm"
+  "wishesInput": ".frm",
+  "boxMenu": ".layout-1__header-wrapper-fixed .toggle-menu-item span"
 }
