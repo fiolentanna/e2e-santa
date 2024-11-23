@@ -34,3 +34,16 @@ Cypress.Commands.add("login", (userName, password) => {
   cy.get(loginPage.passwordField).type(password);
   cy.get(generalElements.submitButton).click({ force: true });
 });
+
+Cypress.Commands.add("loginAPI", (email,password) => {
+  cy.request({
+    method: "POST",
+    url: "/api/login",
+    body: {
+      email: email,
+      password: password,
+    },
+  }).then((response) => {
+    expect(response.status).to.eq(200);
+  });
+})
