@@ -4,5 +4,6 @@
  "secondUserNameField": "#input-table-1",
  "secondUserEmailField": ":nth-child(6) #input-table-1",
  "thirdUserNameField": "#input-table-2",
- "thirdUserEmailField": ":nth-child(8) #input-table-2"
+ "thirdUserEmailField": ":nth-child(8) #input-table-2",
+ "randomiserSubmitButton": ".santa-modal_content_buttons > .btn-main"
 }

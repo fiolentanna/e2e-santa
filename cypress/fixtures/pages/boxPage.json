@@ -9,5 +9,6 @@
   "unconfirmedUserCard": "a > .user-card",
   "twelveIcon": ":nth-child(12) > .picture_svg_wrapper",
   "wishesFrame": ".frm",
-  "twentyNineIcon": ":nth-child(29) > .picture_svg_wrapper"
+  "twentyNineIcon": ":nth-child(29) > .picture_svg_wrapper",
+  "randomizerButton": "a > .txt-secondary--med"
 }
