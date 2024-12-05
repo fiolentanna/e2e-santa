@@ -30,10 +30,16 @@ describe("user can create a box and run it", () => {
   let currentBox;
   let boxId;
 
+  const clickArrowRight = (times = 1) => {
+    for (let i = 0; i < times; i++) {
+      cy.get(generalElements.arrowRight).click({ force: true });
+    }
+  };
+
   it("user logins and create a box", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
-    cy.contains("Создать коробку").click();
+    cy.contains("Создать коробку").click({ force: true });
     cy.get(boxPage.boxNameField).type(newBoxName, { force: true });
     currentBox = newBoxName;
     cy.get(boxPage.boxIdField)
@@ -41,16 +47,14 @@ describe("user can create a box and run it", () => {
       .then(function (value) {
         boxId = value;
         cy.log("Box ID:", boxId);
-        cy.get(generalElements.arrowRight).click({ force: true });
-        cy.get(boxPage.sixthIcon).click();
-        cy.get(generalElements.arrowRight).click({ force: true });
+        clickArrowRight(1);
+        cy.get(boxPage.sixthIcon).click({ force: true });
+        clickArrowRight(1);
         cy.get(boxPage.giftPriceToggle).click({ force: true });
         cy.get(boxPage.minAmount).type(minAmount);
         cy.get(boxPage.maxAmount).type(maxAmount);
         cy.get(boxPage.currency).select(currency);
-        cy.get(generalElements.arrowRight).click({ force: true });
-        cy.get(generalElements.arrowRight).click({ force: true });
-        cy.get(generalElements.arrowRight).click({ force: true });
+        clickArrowRight(3);
         cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
         cy.get(inviteeBoxPage.boxMenu)
           .invoke("text")
@@ -79,11 +83,11 @@ describe("user can create a box and run it", () => {
 
   it("Сreate a member card by main user", () => {
     cy.get(invitePage.createParticipantButton).click();
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(boxPage.twentyNineIcon).click();
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
+    cy.get(boxPage.twentyNineIcon).click({ force: true });
+    clickArrowRight(1);
     cy.get(boxPage.wishesFrame).type(wishes);
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
     cy.clearCookies();
   });
 
@@ -94,10 +98,9 @@ describe("user can create a box and run it", () => {
     cy.login(users.user1.email, users.user1.password);
     cy.contains("Создать карточку участника").should("exist");
     cy.get(generalElements.submitButton).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(2);
     cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
     cy.get(inviteeDashboardPage.noticeForInvitee)
       .invoke("text")
       .then((text) => {
@@ -113,11 +116,11 @@ describe("user can create a box and run it", () => {
     cy.contains(currentBox).click({ force: true });
     cy.get(boxPage.unconfirmedUserCard).click();
     cy.get(generalElements.submitButton).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
     cy.get(boxPage.twelveIcon).click({ force: true });
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
     cy.get(boxPage.wishesFrame).type(wishes);
-    cy.get(generalElements.arrowRight).click({ force: true });
+    clickArrowRight(1);
     cy.contains("Это — анонимный чат с вашим Тайным Сантой");
     cy.clearCookies();
   });
@@ -128,11 +131,10 @@ describe("user can create a box and run it", () => {
     cy.contains("войдите").click();
     cy.login(users.user3.email, users.user3.password);
     cy.contains("Создать карточку участника").should("exist");
-    cy.get(generalElements.submitButton).click();
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
+    cy.get(generalElements.submitButton).click({ force: true });
+    clickArrowRight(2);
     cy.get(inviteeBoxPage.wishesInput).type(wishes);
-    cy.get(generalElements.arrowRight).click();
+    clickArrowRight(1);
     cy.get(inviteeDashboardPage.noticeForInvitee)
       .invoke("text")
       .then((text) => {
@@ -144,16 +146,15 @@ describe("user can create a box and run it", () => {
   it("the main user starts the draw on randomizer", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
-    cy.get(mainPage.rundomizerButton).click();
-    cy.get(generalElements.arrowRight).click();
+    cy.get(mainPage.rundomizerButton).click({ force: true });
+    clickArrowRight(1);
     cy.get(randomizerPage.firstUserNameField).type(users.user1.name);
     cy.get(randomizerPage.firstUserEmailField).type(users.user1.email);
     cy.get(randomizerPage.secondUserNameField).type(users.user2.name);
     cy.get(randomizerPage.secondUserEmailField).type(users.user2.email);
     cy.get(randomizerPage.thirdUserNameField).type(users.user3.name);
     cy.get(randomizerPage.thirdUserEmailField).type(users.user3.email);
-    cy.get(generalElements.arrowRight).click();
-    cy.get(generalElements.arrowRight).click();
+    clickArrowRight(2);
     cy.contains("Жеребьевка проведена!").should("exist");
   });
 

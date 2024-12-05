@@ -5,7 +5,14 @@
   "main": "cypress.config.js",
   "scripts": {
     "cy:run": "cypress run",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "cy:run:cloud": "cypress run --record --key 62bdcde1-6fee-4fa6-8b8d-5d04ccf7e404",
+    "cy:spec1": "cypress run --spec 'cypress/e2e/santa-box-create-api.cy.js' --config-file cypress.config.13inch.js --record --key 62bdcde1-6fee-4fa6-8b8d-5d04ccf7e404",
+    "cy:spec2": "cypress run --spec 'cypress/e2e/santa-box-create.cy.js' --config-file cypress.config.24inch.js --record --key 62bdcde1-6fee-4fa6-8b8d-5d04ccf7e404",
+    "cy:nokey:spec1": "cypress run --spec 'cypress/e2e/santa-box-create-api.cy.js' --config-file cypress.config.13inch.js",
+    "cy:nokey:spec2": "cypress run --spec 'cypress/e2e/santa-box-create.cy.js --config-file cypress.config.24inch.js",
+    "cy:nokey:parallel": "npm run cy:nokey:spec1 -- --browser chrome & npm run cy:nokey:spec2 -- --browser electron",
+    "cy:parallel": "npm run cy:spec1 -- --browser chrome --group chrome --ci-build-id=$CI_BUILD_ID --parallel & npm run cy:spec2 -- --browser electron --group electron --ci-build-id=$CI_BUILD_ID"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +20,7 @@
     "@faker-js/faker": "^7.6.0"
   },
   "devDependencies": {
+    "concurrently": "^9.1.0",
     "cypress": "^13.16.0"
   }
 }
